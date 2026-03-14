@@ -230,7 +230,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                         <div>
                             <label class="block text-xs font-medium text-gray-500 mb-1">Thời gian Nhanh nhất (Giờ)</label>
                             <input type="number" step="0.1" class="task-min w-full rounded border-gray-300 border p-2 text-sm" placeholder="0.5" required>
@@ -238,6 +238,10 @@
                         <div>
                             <label class="block text-xs font-medium text-gray-500 mb-1">Thời gian Lâu nhất (Giờ)</label>
                             <input type="number" step="0.1" class="task-max w-full rounded border-gray-300 border p-2 text-sm" placeholder="2.0" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Tỷ trọng thời lượng (%)</label>
+                            <input type="number" class="task-percent w-full rounded border-gray-300 border p-2 text-sm" placeholder="% Giờ làm việc" required>
                         </div>
                     </div>
                 </div>
@@ -267,7 +271,8 @@
                         quantity: item.querySelector('.task-qty').value,
                         unit: item.querySelector('.task-unit').value,
                         minTime: item.querySelector('.task-min').value,
-                        maxTime: item.querySelector('.task-max').value
+                        maxTime: item.querySelector('.task-max').value,
+                        percentHour: item.querySelector('.task-percent').value,
                     });
                 });
 
@@ -292,7 +297,7 @@
                 };
 
                 // 4. Lấy link Webhook URL do hệ thống cung cấp
-                const webhookUrl = "https://script.google.com/macros/s/AKfycbwUxyVy8fxojTxKMiY4mZkSsx7NZtTAzJjABA2xMBk6bSLIsKVKKN30arJ4vY_1TPF7/exec";
+                const webhookUrl = "https://script.google.com/macros/s/AKfycbzbHVFWQ2eNcCgh8UEjxl1b_J-mCf0YmBBWzkpCS7IyD_WHLjlc1vXyCSenOugXVKz3/exec";
 
                 // 5. Submit Fetch bằng POST qua định dạng x-www-form-urlencoded
                 const res = await fetch(webhookUrl, {
