@@ -296,20 +296,24 @@
                     tasks: tasks
                 };
 
-                // 4. Lấy link Webhook URL do hệ thống cung cấp
-                const webhookUrl = "https://script.google.com/macros/s/AKfycbzC-A9zBXRBiVdCqSJ18fPqytkFp_BRw5BtCgQHsykBB8LXYS3w2qbQVdeAXsypyXEV/exec";
+                // 4. Lấy link Webhook URL (Cloudflare Workers Thay Thế Apps Script)
+                const webhookUrl = "https://seychas-d1-demo.seychas-vn.workers.dev";
 
                 // 5. Submit Fetch bằng POST qua định dạng x-www-form-urlencoded
                 const res = await fetch(webhookUrl, {
                     method: 'POST',
-                    mode: 'no-cors', // Cần thiết để bypass CORS trên trình duyệt với Google Scripts
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(formData)
                 });
+                
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.error || "Không thể đồng bộ vào Hệ thống mới");
+                }
 
-                alert('Thành công! Dữ liệu khảo sát đã được đẩy vào file Google Sheets của Công ty.');
+                alert('Thành công! Dữ liệu khảo sát đã được lưu vào Hệ thống Server nội bộ mới của SEYCHAS.');
                 document.getElementById('surveyForm').reset();
                 
             } catch (err) {
