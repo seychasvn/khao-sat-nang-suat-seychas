@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEYCHAS - Khảo Sát Năng Suất Nhân Sự</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'seychas-dark': '#1a1a1a',
+                        'seychas-gold': '#d4af37',
+                        'seychas-light': '#f8f9fa'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        input, select, textarea {
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen p-4 md:p-8 flex justify-center bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-gray-50">
+
+    <div class="max-w-4xl w-full">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold tracking-tight text-seychas-dark mb-2">SEYCHAS</h1>
+            <h2 class="text-2xl font-semibold gradient-text">Phiếu Khảo Sát Năng Suất & Định Biên</h2>
+            <p class="text-gray-500 mt-2 max-w-2xl mx-auto">Dữ liệu từ khảo sát này giúp công ty hiểu rõ khối lượng công việc thực tế của bạn, từ đó điều chỉnh nhân sự để tránh quá tải và xây dựng KPI gắn liền với Doanh thu chung của hệ thống.</p>
+        </header>
+
+        <!-- Form Container -->
+        <form class="glass-panel rounded-2xl p-6 md:p-10" id="surveyForm">
+            
+            <!-- Section 1: Info -->
+            <div class="mb-10">
+                <h3 class="text-lg font-semibold border-b pb-2 mb-6 text-seychas-dark flex items-center">
+                    <span class="bg-gray-800 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-3">1</span> 
+                    Thông Tin Cá Nhân
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Họ và Tên</label>
+                        <input type="text" id="fullName" class="w-full rounded-lg border-gray-300 border p-3 focus:outline-none focus:ring-2 focus:ring-gray-800" placeholder="VD: Bích Phượng" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Khối / Phòng ban</label>
+                        <select id="department" class="w-full rounded-lg border-gray-300 border p-3 focus:outline-none focus:ring-2 focus:ring-gray-800" required>
+                            <option value="">-- Chọn phòng ban --</option>
+                            <option value="R&D">Nghiên cứu & Thiết kế (R&D)</option>
+                            <option value="SX">Sản Xuất & Kho Vận</option>
+                            <option value="MKT">Marketing & Cửa Hàng</option>
+                            <option value="BO">Điều hành / Backoffice</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Vị trí đảm nhiệm</label>
+                        <input type="text" id="position" class="w-full rounded-lg border-gray-300 border p-3 focus:outline-none focus:ring-2 focus:ring-gray-800" placeholder="VD: Trưởng phòng Thiết kế" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Workload -->
+            <div class="mb-10">
+                <h3 class="text-lg font-semibold border-b pb-2 mb-6 text-seychas-dark flex items-center">
+                    <span class="bg-gray-800 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-3">2</span> 
+                    Định Mức Công Việc Thực Tế
+                </h3>
+                <p class="text-sm text-gray-500 mb-4">Vui lòng liệt kê các nhóm công việc CHÍNH bạn đang làm hàng ngày/tháng và ước lượng thời gian khách quan nhất.</p>
+                
+                <div id="taskList" class="space-y-6">
+                    <!-- Task Item Template -->
+                    <div class="task-item bg-gray-50 rounded-xl p-5 border border-gray-100 relative shadow-sm">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                            <div class="md:col-span-5">
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Tên Nhóm Công việc</label>
+                                <input type="text" class="w-full rounded border-gray-300 border p-2 text-sm" placeholder="VD: Rập kỹ thuật sơ đồ" required>
+                            </div>
+                            <div class="md:col-span-3">
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Tần suất</label>
+                                <select class="w-full rounded border-gray-300 border p-2 text-sm">
+                                    <option>Hàng ngày</option>
+                                    <option>Theo Tuần</option>
+                                    <option>Theo Tháng</option>
+                                    <option>Theo BST (Bộ sưu tập)</option>
+                                    <option>Khi phát sinh</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-4">
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Khối lượng / tháng (ước tính)</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="number" class="w-20 rounded border-gray-300 border p-2 text-sm" placeholder="SL">
+                                    <input type="text" class="w-full rounded border-gray-300 border p-2 text-sm" placeholder="Đơn vị (Mẫu/Lần/Đơn...)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Thời gian Nhanh nhất (Giờ/lần)</label>
+                                <input type="number" step="0.1" class="w-full rounded border-gray-300 border p-2 text-sm" placeholder="VD: 0.5 (Nửa tiếng)">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Thời gian Lâu nhất (Giờ/lần)</label>
+                                <input type="number" step="0.1" class="w-full rounded border-gray-300 border p-2 text-sm" placeholder="VD: 2.0 (Hai tiếng)">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Tỷ trọng thời lượng (%)</label>
+                                <input type="number" class="w-full rounded border-gray-300 border p-2 text-sm" placeholder="Chiếm bao nhiêu % quỹ giờ của bạn?">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" onclick="addTask()" class="mt-4 flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 transition">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    Thêm đầu việc khác
+                </button>
+            </div>
+
+            <!-- Section 3: Revenue KPIs -->
+            <div class="mb-10">
+                <h3 class="text-lg font-semibold border-b pb-2 mb-6 text-seychas-dark flex items-center">
+                    <span class="bg-gray-800 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-3">3</span> 
+                    Gắn Kết Mục Tiêu Doanh Thu
+                </h3>
+                <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-5 mb-6">
+                    <p class="text-sm text-blue-800">Tại SEYCHAS, mọi vị trí đều đóng góp vào sự sống còn (Doanh Thu) của công ty. Bạn tự đánh giá vị trí của mình tác động đến doanh thu như thế nào?</p>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">1. Tính chất tác động đến Doanh thu?</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="flex items-start p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="radio" value="Trực tiếp tạo ra Doanh Thu" name="revenue_impact" class="mt-1 h-4 w-4 text-gray-800 focus:ring-gray-800" required>
+                                <div class="ml-3">
+                                    <span class="block text-sm font-medium text-gray-900">Trực tiếp tạo ra Doanh Thu</span>
+                                    <span class="block text-xs text-gray-500">Sales, Ads, Cửa hàng trưởng (Tạo lead, chốt đơn)</span>
+                                </div>
+                            </label>
+                            <label class="flex items-start p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="radio" value="Gián tiếp bảo vệ Doanh Thu" name="revenue_impact" class="mt-1 h-4 w-4 text-gray-800 focus:ring-gray-800">
+                                <div class="ml-3">
+                                    <span class="block text-sm font-medium text-gray-900">Gián tiếp bảo vệ Doanh Thu</span>
+                                    <span class="block text-xs text-gray-500">R&D, Sản xuất, Kho, Kế toán (Chất lượng, đúng hạn, tối ưu phí)</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">2. Đề xuất chỉ số KPI nào của bạn ảnh hưởng lớn nhất đến lợi nhuận công ty?</label>
+                        <textarea id="kpiProposal" rows="2" class="w-full rounded-lg border-gray-300 border p-3 focus:outline-none focus:ring-2 focus:ring-gray-800 text-sm" placeholder="Ví dụ: Tỷ lệ mẫu test phom thành công không phải sửa lại (R&D) / Tỷ lệ chốt đơn thành công (Sale) / Số lượng cắt dư thừa (SX)..." required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="pt-4 border-t flex justify-between items-center text-sm mb-4">
+                <p class="text-xs text-gray-500 w-full mb-4">
+                    📝 Toàn bộ dữ liệu bạn nhập sẽ được bảo mật và tự động kết nối qua API về Google Sheets của Công ty để làm cơ sở đánh giá Định Biên.
+                </p>
+            </div>
+
+            <div class="pt-4 flex justify-end items-center">
+                <button type="submit" id="submitBtn" class="bg-gray-900 hover:bg-black text-white px-8 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5">
+                    Gửi Khảo Sát Tới AI
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Tạo biến đếm Index để xử lý dữ liệu dễ hơn
+        let taskIndex = 0;
+        
+        function addTask() {
+            taskIndex++;
+            const template = `
+                <div class="task-item bg-gray-50 rounded-xl p-5 border border-gray-100 relative shadow-sm mt-4">
+                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 right-3 text-red-400 hover:text-red-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                        <div class="md:col-span-4">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Tên Nhóm Công việc</label>
+                            <input type="text" class="task-name w-full rounded border-gray-300 border p-2 text-sm" placeholder="Nhập tên đầu việc..." required>
+                        </div>
+                        <div class="md:col-span-4">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Tần suất</label>
+                            <select class="task-freq w-full rounded border-gray-300 border p-2 text-sm">
+                                <option>Hàng ngày</option>
+                                <option>Theo Tuần</option>
+                                <option>Theo Tháng</option>
+                                <option>Theo BST (Bộ sưu tập)</option>
+                                <option>Khi phát sinh</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-4">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Khối lượng / tháng (ước tính)</label>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" class="task-qty w-20 rounded border-gray-300 border p-2 text-sm" placeholder="SL" required>
+                                <input type="text" class="task-unit w-full rounded border-gray-300 border p-2 text-sm" placeholder="Đơn vị (Mẫu/Lần/Đơn...)" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Thời gian Nhanh nhất (Giờ)</label>
+                            <input type="number" step="0.1" class="task-min w-full rounded border-gray-300 border p-2 text-sm" placeholder="0.5" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Thời gian Lâu nhất (Giờ)</label>
+                            <input type="number" step="0.1" class="task-max w-full rounded border-gray-300 border p-2 text-sm" placeholder="2.0" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Tỷ trọng thời lượng (%)</label>
+                            <input type="number" class="task-percent w-full rounded border-gray-300 border p-2 text-sm" placeholder="% Giờ làm việc" required>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('taskList').insertAdjacentHTML('beforeend', template);
+        }
+
+        // Tạo sẵn 2 task mẫu ban đầu thay vì HTML tĩnh
+        document.getElementById('taskList').innerHTML = '';
+        addTask();
+        addTask();
+
+        document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "Đang gửi Server...";
+            btn.disabled = true;
+
+            try {
+                // 1. Thu thập TẤT CẢ tasks
+                let tasks = [];
+                document.querySelectorAll('.task-item').forEach(item => {
+                    tasks.push({
+                        name: item.querySelector('.task-name').value,
+                        frequency: item.querySelector('.task-freq').value,
+                        quantity: item.querySelector('.task-qty').value,
+                        unit: item.querySelector('.task-unit').value,
+                        minTime: item.querySelector('.task-min').value,
+                        maxTime: item.querySelector('.task-max').value,
+                        percentHour: item.querySelector('.task-percent').value,
+                    });
+                });
+
+                // 2. Thu thập Revenue Impact radio
+                let revenueImpact = "";
+                const radios = document.getElementsByName('revenue_impact');
+                for (var i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        revenueImpact = radios[i].value;
+                        break;
+                    }
+                }
+
+                // 3. Gom Data Object chuẩn JSON
+                const formData = {
+                    fullName: document.getElementById('fullName').value,
+                    department: document.getElementById('department').value,
+                    position: document.getElementById('position').value,
+                    revenueImpact: revenueImpact,
+                    kpiProposal: document.getElementById('kpiProposal').value,
+                    tasks: tasks
+                };
+
+                // 4. Lấy link Webhook URL do hệ thống cung cấp
+                const webhookUrl = "https://script.google.com/macros/s/AKfycbwUxyVy8fxojTxKMiY4mZkSsx7NZtTAzJjABA2xMBk6bSLIsKVKKN30arJ4vY_1TPF7/exec";
+
+                // 5. Submit Fetch bằng POST qua định dạng x-www-form-urlencoded
+                const res = await fetch(webhookUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // Cần thiết để bypass CORS trên trình duyệt với Google Scripts
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                alert('Thành công! Dữ liệu khảo sát đã được đẩy vào file Google Sheets của Công ty.');
+                document.getElementById('surveyForm').reset();
+                
+            } catch (err) {
+                alert("Lỗi Gửi: " + err.message);
+                console.error(err);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
